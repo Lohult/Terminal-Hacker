@@ -8,6 +8,7 @@ public class Hacker : MonoBehaviour {
     string username = Environment.UserName;
 
     int level;
+    string password;
 
     enum Screen { MainMenu, Password, Win};
     Screen currentScreen = Screen.MainMenu;
@@ -36,26 +37,17 @@ public class Hacker : MonoBehaviour {
         else if (currentScreen == Screen.MainMenu) {
             RunMainMenu(input);
         }
+        else if (currentScreen == Screen.Password) {
+            CheckPassword(input);
+        }
     }
 
-    void RunMainMenu(string input) {
-        if (input == "1") {
-            Terminal.WriteLine("Accessing Library");
-            level = 1;
-            StartGame();
-        }
-        else if (input == "2") {
-            Terminal.WriteLine("Accessing Police Station");
-            level = 2;
-            StartGame();
-        }
-        else if (input == "3") {
-            Terminal.WriteLine("Accessing NASA");
-            level = 3;
-            StartGame();
+    void CheckPassword(string input) {
+        if (input == password) {
+            Terminal.WriteLine("Success");
         }
         else {
-            Terminal.WriteLine("Invalid input");
+            Terminal.WriteLine("Try Again");
         }
     }
 
@@ -64,6 +56,30 @@ public class Hacker : MonoBehaviour {
         currentScreen = Screen.Password;
         Terminal.WriteLine("You have chosen level " + level);
         Terminal.WriteLine("Please enter password ... ");
+    }
+
+    void RunMainMenu(string input) {
+        if (input == "1") {
+            Terminal.WriteLine("Accessing Library");
+            level = 1;
+            password = "books";
+            StartGame();
+        }
+        else if (input == "2") {
+            Terminal.WriteLine("Accessing Police Station");
+            level = 2;
+            password = "handcuffs";
+            StartGame();
+        }
+        else if (input == "3") {
+            Terminal.WriteLine("Accessing NASA");
+            level = 3;
+            password = "antigravity";
+            StartGame();
+        }
+        else {
+            Terminal.WriteLine("Invalid input");
+        }
     }
 
     // Update is called once per frame
