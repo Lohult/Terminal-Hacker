@@ -5,6 +5,7 @@ using System;
 
 public class Hacker : MonoBehaviour {
 
+    const string menuHint = "Type 'menu' to return.";
     // Game config
     string[] level1Passwords = { "books", "aisle", "shelf", "password", "font", "borrow" };
     string[] level2Passwords = { "shotgun", "handcuffs", "badge", "uniform", "law", "order" };
@@ -19,8 +20,7 @@ public class Hacker : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        ShowMainMenu(username); 
-
+        ShowMainMenu(username);
     }
 
     void ShowMainMenu(string user) {
@@ -30,7 +30,6 @@ public class Hacker : MonoBehaviour {
             "Press 1 for Library\n" +
             "Press 2 for Police Station\n" +
             "Press 3 for NASA\n" +
-            "Type 'menu' to return\n" +
             "Enter the number of your selection:");
     }
 
@@ -62,6 +61,7 @@ public class Hacker : MonoBehaviour {
         Terminal.ClearScreen();
         SetRandomPassword();
         Terminal.WriteLine("Enter password, hint: " + password.Anagram());
+        Terminal.WriteLine(menuHint);
     }
 
     void SetRandomPassword() {
@@ -85,6 +85,7 @@ public class Hacker : MonoBehaviour {
         currentScreen = Screen.Win;
         Terminal.ClearScreen();
         ShowLevelReward();
+        Terminal.WriteLine(menuHint);
     }
 
     void ShowLevelReward() {
@@ -111,6 +112,18 @@ o`   'oooo()  | ________   _   _)
 `oo   o` \    |/        | | | |
   `ooo'   `---'         |_| |_|
                 ");
+                break;
+            case 3:
+                Terminal.WriteLine("Tickets to Mars!");
+                Terminal.WriteLine(@"
+ _ __   __ _ ___  __ _ 
+| '_ \ / _` / __|/ _` |
+| | | | (_| \__ \ (_| |
+|_| |_|\__,_|___/\__,_|
+                ");
+                break;
+            default:
+                Debug.LogError("You should not be geting this error.");
                 break;
         }
     }
