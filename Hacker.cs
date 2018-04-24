@@ -5,13 +5,17 @@ using System;
 
 public class Hacker : MonoBehaviour {
 
-    string username = Environment.UserName;
+    // Game config
+    string[] level1Passwords = { "books", "aisle", "shelf", "password", "font", "borrow" };
+    string[] level2Passwords = { "shotgun", "handcuffs", "badge", "uniform", "law", "order" };
+    string[] level3Passwords = { "space", "elon", "rocketship", "spaceman", "starman", "spidersfrommars" };
 
+    // Game state
+    string username = Environment.UserName;
     int level;
     string password;
-
     enum Screen { MainMenu, Password, Win};
-    Screen currentScreen = Screen.MainMenu;
+    Screen currentScreen;
 
     // Use this for initialization
     void Start () {
@@ -30,6 +34,7 @@ public class Hacker : MonoBehaviour {
             "Enter the number of your selection:");
     }
 
+
     void OnUserInput(string input) {
         if (input == "menu") {
             ShowMainMenu(username);
@@ -44,37 +49,76 @@ public class Hacker : MonoBehaviour {
 
     void CheckPassword(string input) {
         if (input == password) {
-            Terminal.WriteLine("Success");
+            DisplayWinScreen();
         }
         else {
+            StartGame();
             Terminal.WriteLine("Try Again");
         }
     }
 
     void StartGame() {
-        Terminal.ClearScreen();
         currentScreen = Screen.Password;
-        Terminal.WriteLine("You have chosen level " + level);
-        Terminal.WriteLine("Please enter password ... ");
+        Terminal.ClearScreen();
+        SetRandomPassword();
+        Terminal.WriteLine("Enter password, hint: " + password.Anagram());
+    }
+
+    void SetRandomPassword() {
+        switch (level) {
+            case 1:
+                password = level1Passwords[UnityEngine.Random.Range(0, level1Passwords.Length)];
+                break;
+            case 2:
+                password = level2Passwords[UnityEngine.Random.Range(0, level2Passwords.Length)];
+                break;
+            case 3:
+                password = level3Passwords[UnityEngine.Random.Range(0, level3Passwords.Length)];
+                break;
+            default:
+                Debug.LogError("Invalid level number");
+                break;
+        }
+    }
+
+    void DisplayWinScreen() {
+        currentScreen = Screen.Win;
+        Terminal.ClearScreen();
+        ShowLevelReward();
+    }
+
+    void ShowLevelReward() {
+        switch (level) {
+            case 1:
+                Terminal.WriteLine("Have a book...");
+                Terminal.WriteLine(@"
+      __        __      
+     /\ \      /\ \ 
+    /  \ \    /  \ \ 
+   / /\ \ \  / /\ \ \ 
+  / / /\ \ \/ / /\ \ \  
+ / / /__\_\/ / /__\_\ \ 
+/ / /______\/ /________\
+\/_____________________/
+                ");
+                break;
+            case 2:
+                Terminal.WriteLine("Get out of jail ...");
+                Terminal.WriteLine(@"
+  ooo,    .---.
+ o`  o   /    |\________________
+o`   'oooo()  | ________   _   _)
+`oo   o` \    |/        | | | |
+  `ooo'   `---'         |_| |_|
+                ");
+                break;
+        }
     }
 
     void RunMainMenu(string input) {
-        if (input == "1") {
-            Terminal.WriteLine("Accessing Library");
-            level = 1;
-            password = "books";
-            StartGame();
-        }
-        else if (input == "2") {
-            Terminal.WriteLine("Accessing Police Station");
-            level = 2;
-            password = "handcuffs";
-            StartGame();
-        }
-        else if (input == "3") {
-            Terminal.WriteLine("Accessing NASA");
-            level = 3;
-            password = "antigravity";
+        bool isValidLevelNumber = (input == "1" || input == "2" || input == "3");
+        if (isValidLevelNumber) {
+            level = int.Parse(input);
             StartGame();
         }
         else {
@@ -84,6 +128,5 @@ public class Hacker : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-
     }
 }
